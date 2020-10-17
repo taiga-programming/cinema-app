@@ -19,8 +19,8 @@ jobs:
           command: npm install 
       - save_cache:
           paths:
-              - node_modules
-            key: app-{{ checksum "package.json" }}
+            - node_modules
+          key: app-{{ checksum "package.json" }}
 
 deploy-to-aws-s3:
   docker:

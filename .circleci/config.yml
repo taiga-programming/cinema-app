@@ -47,12 +47,12 @@ jobs:
                 zip../build.zip -r * .[^.]*
                 echo "build successful"
           - run:
-              name: Beploy to AWS S3
+              name: Deploy to AWS S3
               command: |
                 if ["${CURRENT_BRANCH}"=="master"]
                 then
                   aws --region ${AWS_REGION} s3 sync ~/repo/build s3://{AWS_BUCKET_PRODUCTION} --delete
-                elif  ["${CURRENT_BRANCH}"=="staging"]
+                elif  ["${CURRENT_BRANCH}" == "staging"]
                 then
                   aws --region ${AWS_REGION} s3 sync ~/repo/build s3://{AWS_BUCKET_STAGING} --delete
                 else

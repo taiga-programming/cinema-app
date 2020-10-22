@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: show current branch 
-          command: echo ${CIRCLE_BRANCH}
+          command: echo ${develop}
       - restore_cache:
           keys: 
             - app-{{ checksum "package.json" }}
@@ -30,7 +30,7 @@ jobs:
           - checkout 
           - run:
               name: Show curent branch
-              command: echo ${CIRCLE_BRANCH} 
+              command: echo ${develop} 
           - run:
             name: Installing AWS CLI
             working_directory: /
@@ -49,10 +49,10 @@ jobs:
           - run:
               name: Deploy to AWS S3
               command: |
-                if ["${CIRCLE_BRANCH}"=="master"]
+                if ["${develop}"=="master"]
                 then
                   aws --region ${AWS_REGION} s3 sync ~/repo/build s3://{AWS_BUCKET_PRODUCTION} --delete
-                elif  ["${CIRCLE_BRANCH}" == "staging"]
+                elif  ["${develop}" == "staging"]
                 then
                   aws --region ${AWS_REGION} s3 sync ~/repo/build s3://{AWS_BUCKET_STAGING} --delete
                 else
@@ -67,7 +67,7 @@ jobs:
           - checkout 
           - run:
               name: Show curent branch
-              command: echo ${CIRCLE_BRANCH} 
+              command: echo ${develop} 
           - run:
             name: Installing AWS CLI
             working_directory: /
@@ -87,10 +87,10 @@ jobs:
               name: Beploy to AWS Cloudfront
               command: |
                 aws configure set preview.cloudfront
-                if ["${CIRCLE_BRANCH}"=="master"]
+                if ["${develop}"=="master"]
                 then
                   aws cloudfront create-invalidation --distribution-id ${PRODUCTION_DESTRIBUTION_ID} --paths /\*
-                elif  ["${CIRCLE_BRANCH}"=="staging"]
+                elif  ["${develop}"=="staging"]
                 then
                   aws cloudfront create-invalidation --distribution-id ${STAGING_DESTIBUTION_ID} --paths /\*
                 else

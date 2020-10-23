@@ -1,4 +1,5 @@
 version: 2.1
+
 jobs:
   build:
     docker:
@@ -24,12 +25,11 @@ jobs:
   deploy-to-aws-s3:
     docker:
       - image: circleci/node:6.14.8
-      
         working_directory: ~/repo
         steps: 
           - checkout 
           - run:
-              name: Show curent branch
+              name: Show develop branch
               command: echo ${develop} 
           - run:
             name: Installing AWS CLI

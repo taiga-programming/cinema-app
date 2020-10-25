@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: show current branch 
-          command: echo ${develop}
+          command: echo ${CIRCLE_BRANCH}
       - restore_cache:
           keys: 
             - app-{{ checksum "package.json" }}
@@ -30,7 +30,7 @@ jobs:
       - checkout 
       - run:
           name: Show develop branch
-          command: echo ${develop} 
+          command: echo ${CIRCLE_BRANCH} 
       - run:
           name: Installing AWS CLI
           working_directory: /
@@ -65,7 +65,7 @@ jobs:
       - checkout 
       - run:
           name: Show curent branch
-          command: echo ${develop} 
+          command: echo ${CIRCLE_BRANCH} 
       - run:
           name: Installing AWS CLI
           working_directory: /
@@ -100,14 +100,14 @@ workflows:
     jobs: 
       - build 
       - deploy-to-aws-s3:
-          requires:
-            - build
-          filters: 
-            branches:
-              only:
-                - develop 
-                - staging
-                - master 
+        requires:
+          - build
+        filters: 
+          branches:
+            only:
+              - develop 
+              - staging
+              - master 
       - deploy-to-aws-cloudfront:
           requires:
             - deploy-to-aws-s3

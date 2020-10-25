@@ -49,16 +49,15 @@ jobs:
       - run:
           name: Deploy to AWS S3
           command: |
-            if ["${develop}"=="master"]
+            if ["${CIRCLE_BRANCH}"=="master"]
             then
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://{AWS_BUCKET_PRODUCTION} --delete
-            elif  ["${develop}" == "staging"]
+            elif  ["${CIRCLE_BRANCH}" == "staging"]
             then
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://{AWS_BUCKET_STAGING} --delete
             else
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://{AWS_BUCKET_DEV1} --delete
             fi
-
 
   deploy-to-aws-cloudfront:
     docker:
@@ -88,10 +87,10 @@ jobs:
           name: Beploy to AWS Cloudfront
           command: |
             aws configure set preview.cloudfront
-            if ["${develop}"=="master"]
+            if ["${CIRCLE_BRANCH}"=="master"]
             then
               aws cloudfront create-invalidation --distribution-id ${PRODUCTION_DESTRIBUTION_ID} --paths /\*
-            elif  ["${develop}"=="staging"]
+            elif  ["${CIRCLE_BRANCH}"=="staging"]
             then
               aws cloudfront create-invalidation --distribution-id ${STAGING_DESTIBUTION_ID} --paths /\*
             else

@@ -81,12 +81,12 @@ jobs:
             npm install 
             npm run build 
             cd build 
-            zip../build.zip -r * .[^.]*
+            zip ../build.zip -r * .[^.]*
             echo "build successful"
       - run:
           name: Beploy to AWS Cloudfront
           command: |
-            aws configure set preview.cloudfront
+            aws configure set preview.cloudfront true
             if ["${CIRCLE_BRANCH}"=="master"]
             then
               aws cloudfront create-invalidation --distribution-id ${PRODUCTION_DESTRIBUTION_ID} --paths /\*

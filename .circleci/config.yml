@@ -1,3 +1,4 @@
+  
 version: 2.1
 executors:
   app-executor:
@@ -19,7 +20,7 @@ aliases:
     run:
       name: Install dependencies
       command: npm install 
-  - &save_cache:
+  - &save-cache:
       paths:
         - node_modules
       key: app-{{ checksum "package.json" }}
@@ -47,9 +48,9 @@ jobs:
     steps: 
       - checkout
       - *show-current-branch-name
-      - *restore_cache
+      - *restore-cache
       - *install-dependencies
-      - *save_cache
+      - *save-cache
 
   linting:
     executor: app-executor
@@ -60,6 +61,7 @@ jobs:
       - run:
           name: Run linting
           command: npm run lint
+  
 
   deploy-to-aws-s3:
     executor: app-executor
@@ -80,7 +82,6 @@ jobs:
             else
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://${AWS_BUCKET_DEV1} --delete
             fi
-
   deploy-to-aws-cloudfront:
     executor: app-executor
     steps: 
@@ -101,7 +102,6 @@ jobs:
             else
               aws cloudfront create-invalidation --distribution-id ${DEV_DESTRIBUTION_ID} --paths /\*
             fi
-
 workflows:
   build_and_deploy:
     jobs: 

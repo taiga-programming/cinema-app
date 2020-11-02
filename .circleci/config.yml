@@ -10,7 +10,7 @@ aliases:
     run:
       name: show current branch 
       command: echo ${CIRCLE_BRANCH}
-  - &restore_cache
+  - &restore-cache
     restore_cache:
       keys: 
         - app-{{ checksum "package.json" }}
@@ -113,10 +113,6 @@ workflows:
               only:
                 - develop 
                 - staging
-<<<<<<< HEAD
                 - master 
 
                 
-=======
-                - master 
->>>>>>> 16cdb1e75260427d546dc5b6b7112af90e94566b

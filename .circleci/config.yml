@@ -54,7 +54,7 @@ jobs:
     executor: app-executor	
     steps:
       - checkout
-      - *show-current-branch-name	
+      - *show-current-branch-name
       - *restore-cache
       - run:
           name: Run linting	

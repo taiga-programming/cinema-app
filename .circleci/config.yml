@@ -1,51 +1,65 @@
 version: 2.1
+executors:
+  app-executor:
+    docker:
+      - image: circleci/node:10.15.3
+    working_directory: ~/repo
 
+aliases:
+  - &show-current-branch-name
+    run:
+      name: show current branch 
+      command: echo ${CIRCLE_BRANCH}
+  - &restore_cache
+    restore_cache:
+      keys: 
+        - app-{{ checksum "package.json" }}
+        - app-
+  - &install-dependencies
+    run:
+      name: Install dependencies
+      command: npm install 
+  - &save-cache:
+      paths:
+        - node_modules
+      key: app-{{ checksum "package.json" }}
+  - &install-aws-cli
+    run:
+      name: Installing AWS CLI
+      working_directory: /
+      command: |
+        sudo apt-get -y -qq update 
+        sudo apt-get install -y awscli 
+        sudo apt-get install -y python-pip python-dev build-essential
+  - &build-Project
+    run:
+      name: Build Project 
+      command: |
+        npm install 
+        npm run build 
+        cd build 
+        zip ../build.zip -r * .[^.]*
+        echo "build successful"
+ 
 jobs:
   build:
-    docker:
-      - image: circleci/node:10.15.3
-    working_directory: ~/repo
+    executor: app-executor
     steps: 
       - checkout
-      - run:
-          name: show current branch 
-          command: echo ${CIRCLE_BRANCH}
-      - restore_cache:
-          keys: 
-            - app-{{ checksum "package.json" }}
-            - app-
-      - run:
-          name: Install dependencies
-          command: npm install 
-      - save_cache:
-          paths:
-            - node_modules
-          key: app-{{ checksum "package.json" }}
+      - *show-current-branch-name
+      - *restore-cache
+      - *install-dependencies
+      - *save-cache
+
+  
 
   deploy-to-aws-s3:
-    docker:
-      - image: circleci/node:10.15.3
-    working_directory: ~/repo
+    executor: app-executor
     steps: 
       - checkout 
-      - run:
-          name: Show develop branch
-          command: echo ${CIRCLE_BRANCH} 
-      - run:
-          name: Installing AWS CLI
-          working_directory: /
-          command: |
-            sudo apt-get -y -qq update 
-            sudo apt-get install -y awscli 
-            sudo apt-get install -y python-pip python-dev build-essential 
-      - run:
-          name: Build Project 
-          command: |
-            npm install 
-            npm run build 
-            cd build 
-            zip ../build.zip -r * .[^.]*
-            echo "build successful"
+      - *show-current-branch-name
+      - *install-aws-cli
+      - *build-project
       - run:
           name: Deploy to AWS S3
           command: |
@@ -58,31 +72,13 @@ jobs:
             else
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://${AWS_BUCKET_DEV1} --delete
             fi
-
   deploy-to-aws-cloudfront:
-    docker:
-      - image: circleci/node:10.15.3
-    working_directory: ~/repo
+    executor: app-executor
     steps: 
       - checkout 
-      - run:
-          name: Show curent branch
-          command: echo ${CIRCLE_BRANCH} 
-      - run:
-          name: Installing AWS CLI
-          working_directory: /
-          command: |
-            sudo apt-get -y -qq update 
-            sudo apt-get install -y awscli 
-            sudo apt-get install -y python-pip python-dev build-essential 
-      - run:
-          name: Build Project 
-          command: |
-            npm install 
-            npm run build 
-            cd build 
-            zip ../build.zip -r * .[^.]*
-            echo "build successful"
+      - *show-current-branch-name
+      - *install-aws-cli
+      - *build-project
       - run:
           name: Beploy to AWS Cloudfront
           command: |
@@ -96,11 +92,10 @@ jobs:
             else
               aws cloudfront create-invalidation --distribution-id ${DEV_DESTRIBUTION_ID} --paths /\*
             fi
-
 workflows:
   build_and_deploy:
     jobs: 
-      - build 
+      - build
       - deploy-to-aws-s3:
           requires:
             - build
@@ -118,6 +113,10 @@ workflows:
               only:
                 - develop 
                 - staging
+<<<<<<< HEAD
                 - master 
 
                 
+=======
+                - master 
+>>>>>>> 16cdb1e75260427d546dc5b6b7112af90e94566b

@@ -19,7 +19,8 @@ aliases:
     run:
       name: Install dependencies
       command: npm install 
-  - &save-cache:
+  - &save-cache
+    save_cache:
       paths:
         - node_modules
       key: app-{{ checksum "package.json" }}
@@ -44,20 +45,21 @@ aliases:
 jobs:
   build:
     executor: app-executor
-    steps: 
+    steps:
       - checkout
       - *show-current-branch-name
       - *restore-cache
       - *install-dependencies
       - *save-cache
+
   linting:
-    executor: app-executor	
+    executor: app-executor
     steps:
       - checkout
       - *show-current-branch-name
       - *restore-cache
       - run:
-          name: Run linting	
+          name: Run linting
           command: npm run lint
 
   deploy-to-aws-s3:
@@ -104,10 +106,10 @@ workflows:
     jobs:
       - build
       - linting:
-          requires:	
-            - build	
-          filters:	
-            branches:	
+          requires:
+            - build
+          filters:
+            branches:
               only:
                 - develop 	
                 - staging	
@@ -130,5 +132,3 @@ workflows:
                 - develop 
                 - staging
                 - master 
-
-                

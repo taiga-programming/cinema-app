@@ -103,19 +103,19 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-      - linting:	
+      - linting:
           requires:	
             - build	
-          filters: 	
+          filters:	
             branches:	
-              only:	
+              only:
                 - develop 	
                 - staging	
                 - master
       - deploy-to-aws-s3:
           requires:
             - linting
-          filters: 
+          filters:
             branches:
               only:
                 - develop 
@@ -124,7 +124,7 @@ workflows:
       - deploy-to-aws-cloudfront:
           requires:
             - deploy-to-aws-s3
-          filters: 
+          filters:
             branches:
               only:
                 - develop 

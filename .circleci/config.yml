@@ -53,10 +53,10 @@ jobs:
   linting:
     executor: app-executor	
     steps:
-      - checkout	
+      - checkout
       - *show-current-branch-name	
-      - *restore-cache	
-      - run:	
+      - *restore-cache
+      - run:
           name: Run linting	
           command: npm run lint
 

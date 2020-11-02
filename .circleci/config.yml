@@ -52,7 +52,7 @@ jobs:
       - *save-cache
   linting:
     executor: app-executor	
-    steps:	
+    steps:
       - checkout	
       - *show-current-branch-name	
       - *restore-cache	
@@ -62,7 +62,7 @@ jobs:
 
   deploy-to-aws-s3:
     executor: app-executor
-    steps: 
+    steps:
       - checkout 
       - *show-current-branch-name
       - *install-aws-cli
@@ -81,7 +81,7 @@ jobs:
             fi
   deploy-to-aws-cloudfront:
     executor: app-executor
-    steps: 
+    steps:
       - checkout 
       - *show-current-branch-name
       - *install-aws-cli
@@ -101,7 +101,7 @@ jobs:
             fi
 workflows:
   build_and_deploy:
-    jobs: 
+    jobs:
       - build
       - linting:	
           requires:	

@@ -14,8 +14,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "eslint \"./src/**/*.js*\"",
-    "prettier:check": "prettier --check 'src/**/*.{js,jsx,json}'",
-    "prettier:write": "prettier --write 'src/**/*.{js,jsx,json}'",
+    "prettier:check": "prettier --check \"./src/**/*.{js,jsx,json}*\"",
+    "prettier:write": "prettier --write  \"./src/**/*.{js,jsx,json}*\"",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject"
   },
@@ -41,6 +41,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-standard": "^4.0.2"
+    "eslint-plugin-standard": "^4.0.2",
+    "prettier": "^2.1.2"
   }
 }

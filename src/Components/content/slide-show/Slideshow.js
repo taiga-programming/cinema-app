@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -16,6 +17,11 @@ const Slideshow = (props) => {
   let currentSlideIndex = 0;
 
   useEffect(() => {
+    setState({
+      ...state,
+      slideIndex: 0,
+      slideShow: images[0]
+    });
     if (auto) {
       const timeInterval = setInterval(() => {
         autoMoveSlide();
@@ -29,7 +35,7 @@ const Slideshow = (props) => {
     }
 
     // eslint-disable-next-line
-  }, []);
+  }, [images]);
 
   const autoMoveSlide = () => {
     let lastIndex = 0;
@@ -76,9 +82,7 @@ const Slideshow = (props) => {
   };
 
   const Indicators = (props) => {
-    // eslint-disable-next-line react/prop-types
     const { currentSlide } = props;
-    // eslint-disable-next-line react/prop-types
     const listIndicators = images.map((slide, i) => {
       const btnClasses = i === currentSlide ? 'slider-navButton slider-navButton--active' : 'slider-navButton';
       return <button className={btnClasses} key={i} />;

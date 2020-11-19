@@ -44,6 +44,7 @@ const MainContent = (props) => {
       ];
       setImages(IMAGES);
     }
+    // eslint-disable-next-line
   }, []);
 
   const paginate = (type) => {

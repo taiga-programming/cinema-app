@@ -51,8 +51,7 @@ export const movieDetails = (id) => async (dispatch) => {
     const reviws = await MOVIE_REVIEWS_URL(id);
 
     const resp = await Promise.all([details, credits, images, videos, reviws])
-      .then((values) => Promise.all(
-        values.map((value) => value.data)))
+      .then((values) => Promise.all(values.map((value) => value.data)))
       .then((response) => response);
     dispatchMethod(MOVIE_DETAILS, resp, dispatch);
   } catch (error) {

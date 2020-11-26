@@ -116,7 +116,7 @@
 }
 
 .disabled {
-  display: none;
+  display: none !important;
 }
 
 ::-webkit-input-placeholder {

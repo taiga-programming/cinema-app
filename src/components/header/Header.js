@@ -98,9 +98,8 @@ const Header = (props) => {
 
   return (
     <>
-      {
-        hideHeader && (
-          <div className="header-nav-wrapper">
+      {hideHeader && (
+        <div className="header-nav-wrapper">
           <div className="header-bar"></div>
           <div className="header-navbar">
             <div className="header-image" onClick={() => navigateToMainPage()}>
@@ -125,8 +124,7 @@ const Header = (props) => {
             </ul>
           </div>
         </div>
-        )
-      }
+      )}
     </>
   );
 };

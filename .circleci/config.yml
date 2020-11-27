@@ -207,7 +207,7 @@ workflows:
                 - master
       - deploy-to-aws-s3:
           requires:
-            - unit-test
+            - publish-to-docker-hub
           filters:
             branches:
               only:
